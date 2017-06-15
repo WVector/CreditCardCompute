@@ -2,7 +2,6 @@
  * Created by fengjunming_t on 2017/6/15 0015.
  */
 public class CardModel {
-    //310 月底
     //
     private int mBillDay;
     private int mRepaymentDay;
@@ -54,7 +53,6 @@ public class CardModel {
     }
 
     public boolean isUpdateBill() {
-//        return getCurrentTime() >= getBillEndTime() || getCurrentTime() < getBillStartTime();
         return updateBill;
     }
 

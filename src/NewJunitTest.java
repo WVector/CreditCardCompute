@@ -34,7 +34,7 @@ public class NewJunitTest {
                 .setAvailableCredit(5000D);
 
 
-        if (i == 15) {
+        if (i == 10) {
             cardModel.setBill(5000D);
             cardModel.setArrearage(0D);
         }
