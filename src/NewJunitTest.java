@@ -16,7 +16,7 @@ public class NewJunitTest {
         }
     }
 
-    @Test
+    //    @Test
     public void test4() {
         Date date = new Date();
         for (int i = 1; i < 100; i++) {
@@ -27,13 +27,11 @@ public class NewJunitTest {
     public void test3(CardModel cardModel, long currentTime, int i) {
         System.out.println("----------------------------------------" + TimeUtil.mYyyyMMdd.format(currentTime) + "------------------------------------");
 
-        cardModel.setCurrentTime(currentTime);
-
-        cardModel.setBillDay(28);
-        cardModel.setRepaymentDay(16);
-
-        cardModel.setCerditLine(10000D);
-        cardModel.setAvailableCredit(5000D);
+        cardModel.setCurrentTime(currentTime)
+                .setBillDay(3)
+                .setRepaymentDay(16)
+                .setCerditLine(10000D)
+                .setAvailableCredit(5000D);
 
 
         if (i == 15) {

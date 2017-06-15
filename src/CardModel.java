@@ -39,16 +39,18 @@ public class CardModel {
         return toRepaymentDate;
     }
 
-    public void setToRepaymentDate(int toRepaymentDate) {
+    public CardModel setToRepaymentDate(int toRepaymentDate) {
         this.toRepaymentDate = toRepaymentDate;
+        return this;
     }
 
     public int getToAccountantBillDate() {
         return toAccountantBillDate;
     }
 
-    public void setToAccountantBillDate(int toAccountantBillDate) {
+    public CardModel setToAccountantBillDate(int toAccountantBillDate) {
         this.toAccountantBillDate = toAccountantBillDate;
+        return this;
     }
 
     public boolean isUpdateBill() {
@@ -56,8 +58,9 @@ public class CardModel {
         return updateBill;
     }
 
-    public void setUpdateBill(boolean updateBill) {
+    public CardModel setUpdateBill(boolean updateBill) {
         this.updateBill = updateBill;
+        return this;
     }
 
     private String getBillValidity() {
@@ -76,7 +79,7 @@ public class CardModel {
         return arrearage;
     }
 
-    public void setArrearage(double arrearage) {
+    public CardModel setArrearage(double arrearage) {
         this.arrearage = arrearage;
         if (getBill() > 0) {
             if (arrearage > 0) {
@@ -85,14 +88,16 @@ public class CardModel {
                 repaymentTask = "已还清：" + getBillValidity();
             }
         }
+        return this;
     }
 
     public long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    public CardModel setCurrentTime(long currentTime) {
         this.currentTime = currentTime;
+        return this;
     }
 
     public String getRepaymentTask() {
@@ -103,23 +108,25 @@ public class CardModel {
         return cerditLine;
     }
 
-    public void setCerditLine(double cerditLine) {
+    public CardModel setCerditLine(double cerditLine) {
         this.cerditLine = cerditLine;
+        return this;
     }
 
     public double getAvailableCredit() {
         return availableCredit;
     }
 
-    public void setAvailableCredit(double availableCredit) {
+    public CardModel setAvailableCredit(double availableCredit) {
         this.availableCredit = availableCredit;
+        return this;
     }
 
     public int getBillDay() {
         return mBillDay;
     }
 
-    public void setBillDay(int billDay) {
+    public CardModel setBillDay(int billDay) {
         if (billDay < 1) {
             billDay = 1;
         }
@@ -127,13 +134,14 @@ public class CardModel {
             billDay = 28;
         }
         mBillDay = billDay;
+        return this;
     }
 
     public int getRepaymentDay() {
         return mRepaymentDay;
     }
 
-    public void setRepaymentDay(int repaymentDay) {
+    public CardModel setRepaymentDay(int repaymentDay) {
         if (repaymentDay < 1) {
             repaymentDay = 1;
         }
@@ -142,19 +150,21 @@ public class CardModel {
 
         }
         mRepaymentDay = repaymentDay;
+        return this;
     }
 
     public double getBill() {
         return bill;
     }
 
-    public void setBill(double bill) {
+    public CardModel setBill(double bill) {
         this.bill = bill;
         //设置有效期
         //初始化账单有效期
         computeBillValidity();
         //初始化未还金额
         setArrearage(bill);
+        return this;
     }
 
     private void computeBillValidity() {
@@ -197,15 +207,15 @@ public class CardModel {
     public void compute() {
         new Engine(this).compute(getCurrentTime(), new Engine.Callback() {
             @Override
-            public void billTime(int toBillDay, int toRepaymentDay, CardModel cardModel) {
+            public void billTime(CardModel cardModel) {
                 //出账期 之前是否还清，没还清，提示逾期
-                cardModel.setToAccountantBillDate(toBillDay);
-                cardModel.setToRepaymentDate(toRepaymentDay);
+
             }
 
             @Override
-            public void repaymentTime(int toBillDay, int toRepaymentDay, CardModel cardModel) {
+            public void repaymentTime(CardModel cardModel) {
                 //还款期   之前是否输入账单，没输入，提示更新账单，
+                //设置是否更新账单
                 if (cardModel.bill <= 0) {
                     cardModel.setUpdateBill(true);
                 } else {
@@ -220,8 +230,7 @@ public class CardModel {
                         cardModel.setUpdateBill(true);
                     }
                 }
-                cardModel.setToAccountantBillDate(toBillDay);
-                cardModel.setToRepaymentDate(toRepaymentDay);
+
             }
         });
 

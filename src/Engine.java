@@ -54,7 +54,7 @@ public class Engine {
 
                 int toBillDay = TimeUtil.diffDay(currentTime, billTime);
 
-                callback.billTime(toBillDay, toRepaymentDay, mCardModel);
+                callback.billTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
 
 
             } else if (currentTime >= billTime && currentTime < monthEnd) {
@@ -62,21 +62,32 @@ public class Engine {
 
 
                 int toRepaymentDay = TimeUtil.diffDay(currentTime, nextRepaymentTime);
-
-
                 int toBillDay = TimeUtil.diffDay(currentTime, billTime);
 
-                callback.repaymentTime(toBillDay, toRepaymentDay, mCardModel);
+                callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
 
             } else {
 
-
+                //提前换完，
                 int toRepaymentDay = TimeUtil.diffDay(currentTime, repaymentTime);
 
-                int toBillDay = TimeUtil.diffDay(currentTime, preBillTime);
+                if (mCardModel.getBill() > 0 && mCardModel.getArrearage() <= 0) {
 
 
-                callback.repaymentTime(toBillDay, toRepaymentDay, mCardModel);
+                    int toBillDay = TimeUtil.diffDay(currentTime, billTime);
+
+
+                    callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
+
+                } else {
+
+                    int toBillDay = TimeUtil.diffDay(currentTime, preBillTime);
+
+
+                    callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
+                }
+
+
             }
 
 
@@ -88,12 +99,19 @@ public class Engine {
 
             if (currentTime >= billTime && currentTime < repaymentTime) {
                 //过了出账日  没有过 下一次的还款日  也就是还款期
-
                 int toRepaymentDay = TimeUtil.diffDay(currentTime, repaymentTime);
 
-                int toBillDay = TimeUtil.diffDay(currentTime, billTime);
+                if (mCardModel.getBill() > 0 && mCardModel.getArrearage() <= 0) {
 
-                callback.repaymentTime(toBillDay, toRepaymentDay, mCardModel);
+                    int toBillDay = TimeUtil.diffDay(currentTime, nextBillTime);
+
+                    callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
+                } else {
+
+                    int toBillDay = TimeUtil.diffDay(currentTime, billTime);
+
+                    callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
+                }
 
 
             } else if (currentTime >= repaymentTime && currentTime < monthEnd) {
@@ -104,14 +122,14 @@ public class Engine {
 
                 int toBillDay = TimeUtil.diffDay(currentTime, nextBillTime);
 
-                callback.billTime(toBillDay, toRepaymentDay, mCardModel);
+                callback.billTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
 
             } else {
                 int toRepaymentDay = TimeUtil.diffDay(currentTime, preRepaymentTime);
 
                 int toBillDay = TimeUtil.diffDay(currentTime, billTime);
 
-                callback.billTime(toBillDay, toRepaymentDay, mCardModel);
+                callback.billTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
             }
 
 
@@ -122,9 +140,9 @@ public class Engine {
 
     interface Callback {
 
-        void billTime(int toBillDay, int toRepaymentDay, CardModel cardModel);
+        void billTime(CardModel cardModel);
 
-        void repaymentTime(int toBillDay, int toRepaymentDay, CardModel cardModel);
+        void repaymentTime(CardModel cardModel);
     }
 
 }
