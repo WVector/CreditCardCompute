@@ -25,20 +25,15 @@ public class CardModel {
     private String repaymentTask = "没有任务";
     //未还金额
     private double arrearage;
-
-    public void setUpdateBill(boolean updateBill) {
-        this.updateBill = updateBill;
-    }
-
     //是否更新账单
     private boolean updateBill;
     private long billStartTime;
     private long billEndTime;
-
-
     private int toRepaymentDate;
     private int toAccountantBillDate;
 
+    public CardModel() {
+    }
 
     public int getToRepaymentDate() {
         return toRepaymentDate;
@@ -56,49 +51,13 @@ public class CardModel {
         this.toAccountantBillDate = toAccountantBillDate;
     }
 
-    public void setCurrentTime(long currentTime) {
-        this.currentTime = currentTime;
-    }
-
-
     public boolean isUpdateBill() {
 //        return getCurrentTime() >= getBillEndTime() || getCurrentTime() < getBillStartTime();
         return updateBill;
     }
 
-
-    public CardModel() {
-    }
-
-
-    public void setCerditLine(double cerditLine) {
-        this.cerditLine = cerditLine;
-    }
-
-
-    public void setAvailableCredit(double availableCredit) {
-        this.availableCredit = availableCredit;
-    }
-
-
-    public void setBill(double bill) {
-        this.bill = bill;
-        //设置有效期
-        //初始化账单有效期
-        computeBillValidity();
-        //初始化未还金额
-        setArrearage(bill);
-    }
-
-    public void setArrearage(double arrearage) {
-        this.arrearage = arrearage;
-        if (getBill() > 0) {
-            if (arrearage > 0) {
-                repaymentTask = "未还清：" + getBillValidity();
-            } else {
-                repaymentTask = "已还清：" + getBillValidity();
-            }
-        }
+    public void setUpdateBill(boolean updateBill) {
+        this.updateBill = updateBill;
     }
 
     private String getBillValidity() {
@@ -117,8 +76,23 @@ public class CardModel {
         return arrearage;
     }
 
+    public void setArrearage(double arrearage) {
+        this.arrearage = arrearage;
+        if (getBill() > 0) {
+            if (arrearage > 0) {
+                repaymentTask = "未还清：" + getBillValidity();
+            } else {
+                repaymentTask = "已还清：" + getBillValidity();
+            }
+        }
+    }
+
     public long getCurrentTime() {
         return currentTime;
+    }
+
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
     }
 
     public String getRepaymentTask() {
@@ -129,8 +103,16 @@ public class CardModel {
         return cerditLine;
     }
 
+    public void setCerditLine(double cerditLine) {
+        this.cerditLine = cerditLine;
+    }
+
     public double getAvailableCredit() {
         return availableCredit;
+    }
+
+    public void setAvailableCredit(double availableCredit) {
+        this.availableCredit = availableCredit;
     }
 
     public int getBillDay() {
@@ -138,7 +120,7 @@ public class CardModel {
     }
 
     public void setBillDay(int billDay) {
-        if (billDay > 1) {
+        if (billDay < 1) {
             billDay = 1;
         }
         if (billDay > 28) {
@@ -152,7 +134,7 @@ public class CardModel {
     }
 
     public void setRepaymentDay(int repaymentDay) {
-        if (repaymentDay > 1) {
+        if (repaymentDay < 1) {
             repaymentDay = 1;
         }
         if (repaymentDay > 28) {
@@ -166,6 +148,14 @@ public class CardModel {
         return bill;
     }
 
+    public void setBill(double bill) {
+        this.bill = bill;
+        //设置有效期
+        //初始化账单有效期
+        computeBillValidity();
+        //初始化未还金额
+        setArrearage(bill);
+    }
 
     private void computeBillValidity() {
 

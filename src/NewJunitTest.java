@@ -12,12 +12,12 @@ public class NewJunitTest {
         CardModel cardModel = new CardModel();
         Date date = new Date();
         for (int i = 1; i <= 100; i++) {
-            test3(cardModel, TimeUtil.monthPlusDay(i,date.getTime()), i);
+            test3(cardModel, TimeUtil.monthPlusDay(i, date.getTime()), i);
         }
     }
 
     @Test
-    public void test4(){
+    public void test4() {
         Date date = new Date();
         for (int i = 1; i < 100; i++) {
             System.out.println(TimeUtil.mYyyyMMdd.format(TimeUtil.monthPlusDay(i, date.getTime())));
@@ -36,10 +36,10 @@ public class NewJunitTest {
         cardModel.setAvailableCredit(5000D);
 
 
-//        if (i == 15) {
-//            cardModel.setBill(5000D);
-//            cardModel.setArrearage(0D);
-//        }
+        if (i == 15) {
+            cardModel.setBill(5000D);
+            cardModel.setArrearage(0D);
+        }
 
 
         cardModel.compute();
