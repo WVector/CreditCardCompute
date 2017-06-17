@@ -7,9 +7,11 @@ import java.util.Date;
  */
 public class TimeUtil {
 
+    public static final SimpleDateFormat mYyyyMMddHHmmssSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     public static final SimpleDateFormat mYyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss");
     public static final SimpleDateFormat mYyyyMM = new SimpleDateFormat("yyyyMM");
     public static final SimpleDateFormat mYyyyMMdd = new SimpleDateFormat("yyyyMMdd");
+    public static final SimpleDateFormat mMd = new SimpleDateFormat("M.d");
 
     public static int diffDay(long currentTime, long preBillTime) {
         return (int) ((currentTimeDay(preBillTime) - currentTimeDay(currentTime)) / TimeConstants.DAY);
@@ -50,6 +52,10 @@ public class TimeUtil {
         Date date = new Date(currentTime);
         date.setDate(date.getDate() + days);
         return date.getTime();
+    }
+
+    public static long monthPlusDay2(int day, long currentTime) {
+        return monthPlusDay(day, currentTimeMonth(currentTime));
     }
 
 }

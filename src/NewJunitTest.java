@@ -16,12 +16,13 @@ public class NewJunitTest {
         }
     }
 
-    //    @Test
+    @Test
     public void test4() {
         Date date = new Date();
-        for (int i = 1; i < 100; i++) {
-            System.out.println(TimeUtil.mYyyyMMdd.format(TimeUtil.monthPlusDay(i, date.getTime())));
-        }
+//        for (int i = 1; i < 100; i++) {
+//            System.out.println(TimeUtil.mYyyyMMdd.format(TimeUtil.monthPlusDay(i, date.getTime())));
+//        }
+
     }
 
     public void test3(CardModel cardModel, long currentTime, int i) {
@@ -31,16 +32,16 @@ public class NewJunitTest {
                 .setBillDay(3)
                 .setRepaymentDay(16)
                 .setCerditLine(10000D)
-                .setAvailableCredit(5000D);
+                .setAvailableCredit(5000D)
 
 
-        if (i == 10) {
-            cardModel.setBill(5000D);
-            cardModel.setArrearage(0D);
-        }
+                .setBillStartTime(0)
+                .setBillEndTime(0)
 
 
-        cardModel.compute();
+                .setBill(5000D)
+                .setArrearage(0D)
+                .compute();
 
 
         System.out.println(cardModel);

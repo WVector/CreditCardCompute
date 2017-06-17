@@ -19,8 +19,8 @@ public class Engine {
             return;
         }
 
-        long billTime = TimeUtil.monthPlusDay(mCardModel.getBillDay(), currentTime);
-        long repaymentTime = TimeUtil.monthPlusDay(mCardModel.getRepaymentDay(), currentTime);
+        long billTime = TimeUtil.monthPlusDay2(mCardModel.getBillDay(), currentTime);
+        long repaymentTime = TimeUtil.monthPlusDay2(mCardModel.getRepaymentDay(), currentTime);
 
         long monthEnd = TimeUtil.currentTimePlusMonth(TimeUtil.currentTimeMonth(currentTime), 1);
         long monthStart = TimeUtil.currentTimeMonth(currentTime);
@@ -61,7 +61,8 @@ public class Engine {
 
 
                 int toRepaymentDay = TimeUtil.diffDay(currentTime, nextRepaymentTime);
-                int toBillDay = TimeUtil.diffDay(currentTime, billTime);
+
+                int toBillDay = TimeUtil.diffDay(currentTime, isPayOff() ? nextBillTime : billTime);
 
                 callback.repaymentTime(mCardModel.setToAccountantBillDate(toBillDay).setToRepaymentDate(toRepaymentDay));
 

@@ -30,7 +30,6 @@ public class CardModel {
     private long billEndTime;
     private int toRepaymentDate;
     private int toAccountantBillDate;
-
     public CardModel() {
     }
 
@@ -62,25 +61,39 @@ public class CardModel {
     }
 
     private String getBillValidity() {
-        return TimeUtil.mYyyyMMdd.format(getBillStartTime()) + "-" + TimeUtil.mYyyyMMdd.format(getBillEndTime());
+        return TimeUtil.mMd.format(getBillStartTime()) + "-" + TimeUtil.mMd.format(getBillEndTime());
     }
 
     public long getBillStartTime() {
         return billStartTime;
     }
 
+    public CardModel setBillStartTime(long billStartTime) {
+        this.billStartTime = billStartTime;
+        return this;
+    }
+
     public long getBillEndTime() {
         return billEndTime;
+    }
+
+    public CardModel setBillEndTime(long billEndTime) {
+        this.billEndTime = billEndTime;
+        return this;
     }
 
     public double getArrearage() {
         return arrearage;
     }
 
+
+    /*******************账单，未还款  处理********************/
     public CardModel setArrearage(double arrearage) {
         this.arrearage = arrearage;
+        //之前，用户输入过账单，
         if (getBill() > 0) {
             if (arrearage > 0) {
+
                 repaymentTask = "未还清：" + getBillValidity();
             } else {
                 repaymentTask = "已还清：" + getBillValidity();
@@ -88,6 +101,34 @@ public class CardModel {
         }
         return this;
     }
+
+    private void computeBillValidity() {
+
+        long time = getCurrentTime();
+
+        long billTime = TimeUtil.monthPlusDay2(mBillDay, time);
+        long preBillTime = TimeUtil.currentTimePlusMonth(billTime, -1);
+        long pre2BillTime = TimeUtil.currentTimePlusMonth(billTime, -2);
+
+        if (time < billTime) {
+            billStartTime = pre2BillTime;
+            billEndTime = preBillTime;
+
+        } else {
+            billStartTime = preBillTime;
+            billEndTime = billTime;
+        }
+
+        billEndTime = billEndTime - TimeConstants.MSEC;
+
+
+        System.out.println(TimeUtil.mYyyyMMddHHmmssSSS.format(billStartTime));
+        System.out.println(TimeUtil.mYyyyMMddHHmmssSSS.format(billEndTime));
+
+
+    }
+
+    /***************************************/
 
     public long getCurrentTime() {
         return currentTime;
@@ -156,32 +197,19 @@ public class CardModel {
     }
 
     public CardModel setBill(double bill) {
+
         this.bill = bill;
-        //设置有效期
-        //初始化账单有效期
-        computeBillValidity();
-        //初始化未还金额
-        setArrearage(bill);
-        return this;
-    }
 
-    private void computeBillValidity() {
-
-        long time = getCurrentTime();
-
-        long billTime = TimeUtil.monthPlusDay(mBillDay, time);
-        long preBillTime = TimeUtil.currentTimePlusMonth(billTime, -1);
-        long pre2BillTime = TimeUtil.currentTimePlusMonth(billTime, -2);
-
-        if (time < billTime) {
-            billStartTime = pre2BillTime;
-            billEndTime = preBillTime;
-
-        } else {
-            billStartTime = preBillTime;
-            billEndTime = billTime;
+        //当初始化时，不变
+        if (bill > 0) {
+            //设置有效期
+            //初始化账单有效期
+            computeBillValidity();
+            //初始化未还金额
+            setArrearage(bill);
         }
 
+        return this;
     }
 
     @Override
@@ -202,7 +230,7 @@ public class CardModel {
                 '}';
     }
 
-    public void compute() {
+    public CardModel compute() {
         new Engine(this).compute(getCurrentTime(), new Engine.Callback() {
             @Override
             public void billTime(CardModel cardModel) {
@@ -214,17 +242,18 @@ public class CardModel {
             public void repaymentTime(CardModel cardModel) {
                 //还款期   之前是否输入账单，没输入，提示更新账单，
                 //设置是否更新账单
-                if (cardModel.bill <= 0) {
+                if (cardModel.getBill() <= 0) {
                     cardModel.setUpdateBill(true);
                 } else {
                     long currentTime = cardModel.getCurrentTime();
                     //向前移动一个月
                     long preCurrentTime = TimeUtil.currentTimePlusMonth(currentTime, -1);
-                    if (preCurrentTime < cardModel.getBillEndTime() && preCurrentTime >= cardModel.getBillStartTime()) {
+                    if (preCurrentTime <= cardModel.getBillEndTime() && preCurrentTime >= cardModel.getBillStartTime()) {
                         //有效期之内，所以不更新
                         cardModel.setUpdateBill(false);
                     } else {
-                        cardModel.setBill(0D);
+                        //账单初始化
+//                        cardModel.setBill(0D);
                         cardModel.setUpdateBill(true);
                     }
                 }
@@ -232,6 +261,6 @@ public class CardModel {
             }
         });
 
-        System.out.println("-----");
+        return this;
     }
 }
