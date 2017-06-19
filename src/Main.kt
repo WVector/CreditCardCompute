@@ -13,4 +13,15 @@ fun main(args: Array<String>) {
     println(d)
     println(Math.floor(2.5))
     println(Math.ceil(2.5))
+
+
+
+    listOf("", "").forEachIndexed {
+        it, index ->
+
+
+    }
+
+
+    println("this  ".removeSuffix("is"))
 }

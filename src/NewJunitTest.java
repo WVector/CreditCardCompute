@@ -18,10 +18,12 @@ public class NewJunitTest {
 
     @Test
     public void test4() {
-        Date date = new Date();
+//        Date date = new Date();
 //        for (int i = 1; i < 100; i++) {
 //            System.out.println(TimeUtil.mYyyyMMdd.format(TimeUtil.monthPlusDay(i, date.getTime())));
 //        }
+
+        System.out.println(TimeUtil.currentHourBetweenAB(10, 20));
 
     }
 

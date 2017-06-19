@@ -9,6 +9,7 @@ public class TimeUtil {
 
     public static final SimpleDateFormat mYyyyMMddHHmmssSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     public static final SimpleDateFormat mYyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss");
+    public static final SimpleDateFormat mYyyyMMddHH = new SimpleDateFormat("yyyyMMddHH");
     public static final SimpleDateFormat mYyyyMM = new SimpleDateFormat("yyyyMM");
     public static final SimpleDateFormat mYyyyMMdd = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat mMd = new SimpleDateFormat("M.d");
@@ -42,6 +43,15 @@ public class TimeUtil {
         return currentTime;
     }
 
+    public static long currentTimeHour(long currentTime) {
+        try {
+            return mYyyyMMddHH.parse(mYyyyMMddHHmmssSSS.format(currentTime).substring(0, 10)).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return currentTime;
+    }
+
     public static long currentTimePlusMonth(long currentTime, int months) {
         Date date = new Date(currentTime);
         date.setMonth(date.getMonth() + months);
@@ -58,4 +68,19 @@ public class TimeUtil {
         return monthPlusDay(day, currentTimeMonth(currentTime));
     }
 
+    public static boolean currentHourBetweenAB(int a, int b) {
+        Date currentDate = new Date();
+        long currentDateTime = currentDate.getTime();
+        currentDate.setHours(a);
+        long aTime = currentTimeHour(currentDate.getTime());
+        currentDate.setHours(b);
+        long bTime = currentTimeHour(currentDate.getTime());
+
+        System.out.println(mYyyyMMddHHmmssSSS.format(currentDateTime));
+        System.out.println(mYyyyMMddHHmmssSSS.format(aTime));
+        System.out.println(mYyyyMMddHHmmssSSS.format(bTime));
+
+
+        return aTime > bTime ? currentDateTime < aTime && currentDateTime > bTime : currentDateTime < bTime && currentDateTime > aTime;
+    }
 }
